@@ -7,6 +7,11 @@
     "test": "test"
   },
   "repository": "",
+  "dependencies" : {
+    "socket.io" : "",
+    "express" : "",
+    "firebase" : ""
+  },
   "author": "Matthew Starkey",
   "license": "BSD"
 }

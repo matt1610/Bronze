@@ -86,7 +86,7 @@ function startStreaming(io) {
 
     console.log('Before');
 
-    var dataUri = base64Image("./icon4.png");
+    var dataUri = base64Image("./stream/image_stream.jpg");
 
     console.log('After');
 
