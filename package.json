@@ -10,7 +10,8 @@
   "dependencies" : {
     "socket.io" : "",
     "express" : "",
-    "firebase" : ""
+    "firebase" : "",
+    "mime" : ""
   },
   "author": "Matthew Starkey",
   "license": "BSD"
