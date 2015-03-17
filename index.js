@@ -1,12 +1,18 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
+
 var io = require('socket.io')(http);
+var Firebase = require("firebase");
+
 var fs = require('fs');
+var util = require("util");
 var path = require('path');
  
 var spawn = require('child_process').spawn;
 var proc;
+
+var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
  
 app.use('/', express.static(path.join(__dirname, 'stream')));
  
@@ -42,6 +48,10 @@ io.on('connection', function(socket) {
 http.listen(3000, function() {
   console.log('listening on *:3000');
 });
+
+
+
+
  
 function stopStreaming() {
   if (Object.keys(sockets).length == 0) {
@@ -49,6 +59,12 @@ function stopStreaming() {
     if (proc) proc.kill();
     fs.unwatchFile('./stream/image_stream.jpg');
   }
+}
+
+// Get Data URI of Image
+function base64Image(src) {
+    var data = fs.readFileSync(src).toString("base64");
+    return util.format("data:%s;base64,%s", mime.lookup(src), data);
 }
  
 function startStreaming(io) {
@@ -67,6 +83,34 @@ function startStreaming(io) {
  
   fs.watchFile('./stream/image_stream.jpg', function(current, previous) {
     io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
+
+    var dataUri = base64Image("./icon4.png");
+
+    myFirebaseRef.set({
+      img : dataUri
+    });
+
   })
  
-}
+} // End Streaming Fn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
