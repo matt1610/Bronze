@@ -1,0 +1,12 @@
+{
+  "name": "bronze",
+  "version": "0.0.1",
+  "description": "Node App to stream live video",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": "",
+  "author": "Matthew Starkey",
+  "license": "BSD"
+}
