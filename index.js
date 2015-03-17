@@ -10,6 +10,7 @@ var util = require("util");
 var path = require('path');
  
 var spawn = require('child_process').spawn;
+var mime = require('mime');
 var proc;
 
 var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
