@@ -84,7 +84,11 @@ function startStreaming(io) {
   fs.watchFile('./stream/image_stream.jpg', function(current, previous) {
     io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
 
+    console.log('Before');
+
     var dataUri = base64Image("./icon4.png");
+
+    console.log('After');
 
     myFirebaseRef.set({
       img : dataUri
