@@ -31,7 +31,7 @@ myFirebaseRef.child('settings').on('value', function(snapshot) {
     stopStreaming();
   };
 
-  Start();
+  // Start();
 
 });
  
@@ -44,37 +44,33 @@ app.get('/', function(req, res) {
 // SOCKET LIST
 var sockets = {};
 
-Start();
+// Start();
 // SOCKET CONNECTION
-function Start() {
-
-    io.on('connection', function(socket) {
+io.on('connection', function(socket) {
  
-    sockets[socket.id] = socket;
-    console.log("Total clients connected : ", Object.keys(sockets).length);
-   
-    socket.on('disconnect', function() {
-      delete sockets[socket.id];
-   
-      // no more sockets, kill the stream
-      if (Object.keys(sockets).length == 0) {
-        app.set('watchingFile', false);
-        if (proc) proc.kill();
-        fs.unwatchFile('./stream/image_stream.jpg');
-      }
-    });
-   
-    socket.on('start-stream', function() {
-      startStreaming(io);
-    });
-   
+  sockets[socket.id] = socket;
+  console.log("Total clients connected : ", Object.keys(sockets).length);
+ 
+  socket.on('disconnect', function() {
+    delete sockets[socket.id];
+ 
+    // no more sockets, kill the stream
+    if (Object.keys(sockets).length == 0) {
+      app.set('watchingFile', false);
+      if (proc) proc.kill();
+      fs.unwatchFile('./stream/image_stream.jpg');
+    }
   });
-   
-  http.listen(3000, function() {
-    console.log('listening on *:3000');
+ 
+  socket.on('start-stream', function() {
+    startStreaming(io);
   });
-
-}
+ 
+});
+ 
+http.listen(3000, function() {
+  console.log('listening on *:3000');
+});
 
 
 
