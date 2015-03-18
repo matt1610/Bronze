@@ -14,6 +14,10 @@ var mime = require('mime');
 var proc;
 
 var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
+
+myFirebaseRef.child('bronzecam').on('value', function(snapshot) {
+  console.log(snapshot.val());
+})
  
 app.use('/', express.static(path.join(__dirname, 'stream')));
  
@@ -67,6 +71,13 @@ function base64Image(src) {
     var data = fs.readFileSync(src).toString("base64");
     return util.format("data:%s;base64,%s", mime.lookup(src), data);
 }
+
+
+
+
+
+
+
  
 function startStreaming(io) {
  
@@ -75,8 +86,7 @@ function startStreaming(io) {
     return;
   }
  
-  var args = ["-w", "640", "-h", "480", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "30000"];
-  proc = spawn('raspistill', args);
+  getStill(10);
  
   console.log('Watching for changes...');
  
@@ -85,11 +95,9 @@ function startStreaming(io) {
   fs.watchFile('./stream/image_stream.jpg', function(current, previous) {
     io.sockets.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
 
-    console.log('Before');
-
     var dataUri = base64Image("./stream/image_stream.jpg");
 
-    console.log('After');
+    console.log('Done');
 
     myFirebaseRef.set({
       img : dataUri
@@ -104,7 +112,11 @@ function startStreaming(io) {
 
 
 
-
+function getStill(wait) {
+  var freq = (wait * 1000).toString();
+  var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", freq];
+  proc = spawn('raspistill', args);
+}
 
 
 
