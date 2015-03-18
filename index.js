@@ -111,7 +111,7 @@ function startStreaming(io) {
   }
  
   var freq = (DELAY * 1000).toString();
-  var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", freq];
+  var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "30000"];
   proc = spawn('raspistill', args);
  
   console.log('Watching for changes...');
