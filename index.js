@@ -15,44 +15,68 @@ var proc;
 
 var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
 
-myFirebaseRef.child('bronzecam').on('value', function(snapshot) {
-  console.log(snapshot.val());
-})
+var ON;
+var DELAY;
+var STREAMING;
+
+myFirebaseRef.child('settings').on('value', function(snapshot) {
+
+  ON = parseInt(snapshot.val().on);
+  console.log('ON ' + ON);
+
+  DELAY = parseInt(snapshot.val().delay);
+  console.log('DELAY: ' + DELAY);
+
+  if (app.get('watchingFile') == true) {
+    stopStreaming();
+  };
+
+  Start();
+
+});
  
+// ROUTING
 app.use('/', express.static(path.join(__dirname, 'stream')));
- 
- 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
- 
+
+// SOCKET LIST
 var sockets = {};
+
+Start();
+// SOCKET CONNECTION
+function Start() {
+
+    io.on('connection', function(socket) {
  
-io.on('connection', function(socket) {
- 
-  sockets[socket.id] = socket;
-  console.log("Total clients connected : ", Object.keys(sockets).length);
- 
-  socket.on('disconnect', function() {
-    delete sockets[socket.id];
- 
-    // no more sockets, kill the stream
-    if (Object.keys(sockets).length == 0) {
-      app.set('watchingFile', false);
-      if (proc) proc.kill();
-      fs.unwatchFile('./stream/image_stream.jpg');
-    }
+    sockets[socket.id] = socket;
+    console.log("Total clients connected : ", Object.keys(sockets).length);
+   
+    socket.on('disconnect', function() {
+      delete sockets[socket.id];
+   
+      // no more sockets, kill the stream
+      if (Object.keys(sockets).length == 0) {
+        app.set('watchingFile', false);
+        if (proc) proc.kill();
+        fs.unwatchFile('./stream/image_stream.jpg');
+      }
+    });
+   
+    socket.on('start-stream', function() {
+      startStreaming(io);
+    });
+   
   });
- 
-  socket.on('start-stream', function() {
-    startStreaming(io);
+   
+  http.listen(3000, function() {
+    console.log('listening on *:3000');
   });
- 
-});
- 
-http.listen(3000, function() {
-  console.log('listening on *:3000');
-});
+
+}
+
+
 
 
 
@@ -86,7 +110,9 @@ function startStreaming(io) {
     return;
   }
  
-  getStill(10);
+  var freq = (DELAY * 1000).toString();
+  var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", freq];
+  proc = spawn('raspistill', args);
  
   console.log('Watching for changes...');
  
@@ -108,15 +134,6 @@ function startStreaming(io) {
 } // End Streaming Fn
 
 
-
-
-
-
-function getStill(wait) {
-  var freq = (wait * 1000).toString();
-  var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", freq];
-  proc = spawn('raspistill', args);
-}
 
 
 
