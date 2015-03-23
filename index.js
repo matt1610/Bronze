@@ -18,16 +18,8 @@ var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
 var ON = false;
 var DELAY;
 var STREAMING;
-var FirstTime = true;
 
 myFirebaseRef.child('settings').on('value', function(snapshot) {
-
-  // First Image
-  if (!ON && FirstTime) {
-    startStreaming(io, '1000');
-    FirstTime = false;
-    CheckToStop();
-  };
 
   ON = snapshot.val().on;
   console.log('ON ' + ON);
