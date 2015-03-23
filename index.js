@@ -19,19 +19,19 @@ var ON;
 var DELAY;
 var STREAMING;
 
-// myFirebaseRef.child('settings').on('value', function(snapshot) {
+myFirebaseRef.child('settings').on('value', function(snapshot) {
 
-//   ON = parseInt(snapshot.val().on);
-//   console.log('ON ' + ON);
+  ON = parseInt(snapshot.val().on);
+  console.log('ON ' + ON);
 
-//   DELAY = parseInt(snapshot.val().delay);
-//   console.log('DELAY: ' + DELAY);
+  DELAY = parseInt(snapshot.val().delay);
+  console.log('DELAY: ' + DELAY);
 
-//   if (app.get('watchingFile') == true) {
-//     stopStreaming();
-//   };
+  if (ON > 0) {
+    startStreaming(io);
+  };
 
-// });
+});
  
 // ROUTING
 app.use('/', express.static(path.join(__dirname, 'stream')));
@@ -76,7 +76,7 @@ http.listen(3000, function() {
 
 
  
-function stopStreaming() {
+function CheckToStop() {
   if (Object.keys(sockets).length == 0) {
     app.set('watchingFile', false);
     if (proc) proc.kill();
@@ -119,6 +119,8 @@ function startStreaming(io) {
     var dataUri = base64Image("./stream/image_stream.jpg");
 
     console.log('Done');
+
+    CheckToStop();
 
     // myFirebaseRef.set({
     //   img : dataUri
