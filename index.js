@@ -130,9 +130,11 @@ function startStreaming(io) {
 
     CheckToStop();
 
-    myFirebaseRef.set({
-      img : dataUri
-    });
+    myFirebaseRef.child('img').set(dataUri);
+
+    // myFirebaseRef.set({
+    //   img : dataUri
+    // });
 
   })
  
