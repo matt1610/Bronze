@@ -28,7 +28,7 @@ myFirebaseRef.child('settings').on('value', function(snapshot) {
   console.log('DELAY: ' + DELAY);
 
   if (ON == true) {
-    startStreaming(io, '30000');
+    startStreaming(io);
   };
 
   if (!ON) {
@@ -66,7 +66,7 @@ function base64Image(src) {
 
 
  
-function startStreaming(io, delay) {
+function startStreaming(io) {
 
   var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "30000"];
   proc = spawn('raspistill', args);
