@@ -77,12 +77,20 @@ http.listen(3000, function() {
 
  
 function CheckToStop() {
-  if (Object.keys(sockets).length == 0) {
+
+  if (!ON) {
     app.set('watchingFile', false);
     if (proc) proc.kill();
     fs.unwatchFile('./stream/image_stream.jpg');
     console.log('Stopped');
   }
+
+  // if (Object.keys(sockets).length == 0) {
+  //   app.set('watchingFile', false);
+  //   if (proc) proc.kill();
+  //   fs.unwatchFile('./stream/image_stream.jpg');
+  //   console.log('Stopped');
+  // }
 }
 
 // Get Data URI of Image
