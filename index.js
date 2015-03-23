@@ -31,6 +31,10 @@ myFirebaseRef.child('settings').on('value', function(snapshot) {
     startStreaming(io);
   };
 
+  if (!ON) {
+    CheckToStop();
+  };
+
 });
  
 // ROUTING
@@ -126,9 +130,9 @@ function startStreaming(io) {
 
     CheckToStop();
 
-    // myFirebaseRef.set({
-    //   img : dataUri
-    // });
+    myFirebaseRef.set({
+      img : dataUri
+    });
 
   })
  
