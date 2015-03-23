@@ -22,10 +22,10 @@ var STREAMING;
 myFirebaseRef.child('settings').on('value', function(snapshot) {
 
   ON = snapshot.val().on;
-  // console.log('ON ' + ON);
+  console.log('ON ' + ON);
 
   DELAY = parseInt(snapshot.val().delay);
-  // console.log('DELAY: ' + DELAY);
+  console.log('DELAY: ' + DELAY);
 
   if (ON == true) {
     startStreaming(io);
@@ -44,7 +44,7 @@ app.get('/', function(req, res) {
 });
  
 http.listen(3000, function() {
-  // console.log('listening on *:3000');
+  console.log('listening on *:3000');
 });
  
 function CheckToStop() {
@@ -52,7 +52,7 @@ function CheckToStop() {
     app.set('watchingFile', false);
     if (proc) proc.kill();
     fs.unwatchFile('./stream/image_stream.jpg');
-    // console.log('Stopped');
+    console.log('Stopped');
   }
 }
 
@@ -71,22 +71,22 @@ function startStreaming(io) {
   var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "30000"];
   proc = spawn('raspistill', args);
  
-  // console.log('Watching for changes...');
+  console.log('Watching for changes...');
  
   app.set('watchingFile', true);
  
   fs.watchFile('./stream/image_stream.jpg', function(current, previous) {
     var dataUri = base64Image("./stream/image_stream.jpg");
 
-    // console.log('Watching');
+    console.log('Watching');
 
     CheckToStop();
 
     myFirebaseRef.child('img').set(dataUri, function(error) {
         if (error) {
-          // console.log(error);
+          console.log(error);
         } else{
-          // console.log('Image Uploaded');
+          console.log('Image Uploaded');
         }
     });
 
