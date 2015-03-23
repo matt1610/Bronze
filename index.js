@@ -78,7 +78,7 @@ function startStreaming(io) {
   fs.watchFile('./stream/image_stream.jpg', function(current, previous) {
     var dataUri = base64Image("./stream/image_stream.jpg");
 
-    console.log('Watching'):
+    console.log('Watching');
 
     CheckToStop();
 
