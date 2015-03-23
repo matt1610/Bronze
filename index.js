@@ -15,11 +15,19 @@ var proc;
 
 var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
 
-var ON;
+var ON = false;
 var DELAY;
 var STREAMING;
+var FirstTime = true;
 
 myFirebaseRef.child('settings').on('value', function(snapshot) {
+
+  // First Image
+  if (!ON && FirstTime) {
+    startStreaming(io, '1000');
+    FirstTime = false;
+    CheckToStop();
+  };
 
   ON = snapshot.val().on;
   console.log('ON ' + ON);
@@ -28,7 +36,7 @@ myFirebaseRef.child('settings').on('value', function(snapshot) {
   console.log('DELAY: ' + DELAY);
 
   if (ON == true) {
-    startStreaming(io);
+    startStreaming(io, '30000');
   };
 
   if (!ON) {
@@ -65,10 +73,8 @@ function base64Image(src) {
 }
 
 
-
-
  
-function startStreaming(io) {
+function startStreaming(io, delay) {
 
   var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "30000"];
   proc = spawn('raspistill', args);
