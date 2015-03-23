@@ -21,13 +21,13 @@ var STREAMING;
 
 myFirebaseRef.child('settings').on('value', function(snapshot) {
 
-  ON = parseInt(snapshot.val().on);
+  ON = snapshot.val().on;
   console.log('ON ' + ON);
 
   DELAY = parseInt(snapshot.val().delay);
   console.log('DELAY: ' + DELAY);
 
-  if (ON > 0) {
+  if (ON == true) {
     startStreaming(io);
   };
 
