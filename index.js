@@ -86,10 +86,6 @@ function CheckToStop() {
   }
 
   // if (Object.keys(sockets).length == 0) {
-  //   app.set('watchingFile', false);
-  //   if (proc) proc.kill();
-  //   fs.unwatchFile('./stream/image_stream.jpg');
-  //   console.log('Stopped');
   // }
 }
 
