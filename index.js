@@ -19,21 +19,19 @@ var ON;
 var DELAY;
 var STREAMING;
 
-myFirebaseRef.child('settings').on('value', function(snapshot) {
+// myFirebaseRef.child('settings').on('value', function(snapshot) {
 
-  ON = parseInt(snapshot.val().on);
-  console.log('ON ' + ON);
+//   ON = parseInt(snapshot.val().on);
+//   console.log('ON ' + ON);
 
-  DELAY = parseInt(snapshot.val().delay);
-  console.log('DELAY: ' + DELAY);
+//   DELAY = parseInt(snapshot.val().delay);
+//   console.log('DELAY: ' + DELAY);
 
-  if (app.get('watchingFile') == true) {
-    stopStreaming();
-  };
+//   if (app.get('watchingFile') == true) {
+//     stopStreaming();
+//   };
 
-  // Start();
-
-});
+// });
  
 // ROUTING
 app.use('/', express.static(path.join(__dirname, 'stream')));
@@ -106,7 +104,7 @@ function startStreaming(io) {
     return;
   }
  
-  var freq = (DELAY * 1000).toString();
+  // var freq = (5 * 1000).toString();
   var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "30000"];
   proc = spawn('raspistill', args);
  
