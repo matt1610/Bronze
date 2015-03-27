@@ -89,8 +89,6 @@ function Start() {
     });
 
     myFirebaseRef.child('date').set(new Date());
-
-  });
  
 }
 
