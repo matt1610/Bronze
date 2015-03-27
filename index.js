@@ -1,4 +1,5 @@
 console.log('Bronze App');
+Log('Bronze App');
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -60,8 +61,6 @@ var HEIGHT;
 
 camera.start();
 
-Log('Started');
-
 camera.on("started", function( err, timestamp ){
   console.log("photo started at " + timestamp );
   Log('Started');
@@ -71,10 +70,12 @@ camera.on("read", function( err, timestamp, filename ){
   if (err) {
     Log(err);
   };
+  Log('Read');
   console.log("photo image captured with filename: " + filename );
   var dataUri = base64Image("./photo/image.jpg");
   Send(dataUri);
   camera.stop();
+  Log('Stopped');
 });
 
 camera.on("exit", function( timestamp ){
@@ -88,7 +89,8 @@ camera.on("exit", function( timestamp ){
  
 
 function Log(msg) {
-  myFirebaseRef.child('console').set(msg);
+  var d = new Date();
+  myFirebaseRef.child('console').set(msg +' '+ d.toTimeString());
 }
 
  
