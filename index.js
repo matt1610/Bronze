@@ -17,7 +17,7 @@ var camera = new RaspiCam({
     timeout: 0 // take the picture immediately
   });
 
-var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
+// var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
 
 var ON = false;
 var DELAY;
@@ -25,27 +25,28 @@ var STREAMING;
 var WIDTH;
 var HEIGHT;
 
-myFirebaseRef.child('settings').on('value', function(snapshot) {
+// myFirebaseRef.child('settings').on('value', function(snapshot) {
 
-  ON = snapshot.val().on;
-  console.log('ON ' + ON);
+//   ON = snapshot.val().on;
+//   console.log('ON ' + ON);
 
-  DELAY = parseInt(snapshot.val().delay);
-  console.log('DELAY: ' + DELAY);
+//   DELAY = parseInt(snapshot.val().delay);
+//   console.log('DELAY: ' + DELAY);
 
-  WIDTH = snapshot.val().width.toString();
-  HEIGHT = snapshot.val().height.toString();
+//   WIDTH = snapshot.val().width.toString();
+//   HEIGHT = snapshot.val().height.toString();
 
-  if (ON == true) {
-    // startStreaming(io);
-  };
+//   if (ON == true) {
+//     // startStreaming(io);
+//   };
 
-  if (!ON) {
+//   if (!ON) {
 
-  };
+//   };
 
-});
+// });
 
+camera.start();
 
 console.log('Here');
 
