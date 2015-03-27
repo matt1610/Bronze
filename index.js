@@ -70,6 +70,7 @@ camera.on("read", function( err, timestamp, filename ){
   console.log("photo image captured with filename: " + filename );
   var dataUri = base64Image("./photo/image.jpg");
   Send(dataUri);
+  camera.stop();
 });
 
 camera.on("exit", function( timestamp ){
@@ -92,6 +93,7 @@ function Send(dataUri) {
           console.log(error);
         } else{
           console.log('Image Uploaded');
+          camera.start();
         }
     });
 
