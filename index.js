@@ -19,6 +19,8 @@ var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
 var ON = false;
 var DELAY;
 var STREAMING;
+var WIDTH;
+var HEIGHT;
 
 myFirebaseRef.child('settings').on('value', function(snapshot) {
 
@@ -27,6 +29,9 @@ myFirebaseRef.child('settings').on('value', function(snapshot) {
 
   DELAY = parseInt(snapshot.val().delay);
   console.log('DELAY: ' + DELAY);
+
+  WIDTH = snapshot.val().width.toString();
+  HEIGHT = snapshot.val().height.toString();
 
   if (ON == true) {
     startStreaming(io);
@@ -71,7 +76,8 @@ function startStreaming(io) {
 
   var del = (DELAY * 1000).toString();
 
-  var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", del];
+  var args = ["-w", WIDTH, "-h", HEIGHT, "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", del];
+
   proc = spawn('raspistill', args);
  
   console.log('Watching for changes...');
@@ -92,6 +98,8 @@ function startStreaming(io) {
           console.log('Image Uploaded');
         }
     });
+
+    myFirebaseRef.child('date').set(new Date());
 
   }); // End watchFile
  
