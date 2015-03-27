@@ -3,19 +3,16 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 
+var io = require('socket.io')(http);
 var Firebase = require("firebase");
 
 var fs = require('fs');
 var util = require("util");
 var path = require('path');
-
-var RaspiCam = require("raspicam");
-var camera = new RaspiCam({
-    mode: "photo",
-    output: "./photo/image.jpg",
-    encoding: "jpg",
-    timeout: 0 // take the picture immediately
-  });
+ 
+var spawn = require('child_process').spawn;
+var mime = require('mime');
+var proc;
 
 var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
 
@@ -37,34 +34,14 @@ myFirebaseRef.child('settings').on('value', function(snapshot) {
   HEIGHT = snapshot.val().height.toString();
 
   if (ON == true) {
-    // startStreaming(io);
+    startStreaming(io);
   };
 
   if (!ON) {
-
+    CheckToStop();
   };
 
 });
-
-
-
-
-camera.on("started", function( err, timestamp ){
-  console.log("photo started at " + timestamp );
-});
-
-camera.on("read", function( err, timestamp, filename ){
-  console.log("photo image captured with filename: " + filename );
-});
-
-camera.on("exit", function( timestamp ){
-  console.log("photo child process has exited at " + timestamp );
-});
-
-
-
-
-
  
 // ROUTING
 app.use('/', express.static(path.join(__dirname, 'stream')));
@@ -75,10 +52,44 @@ app.get('/', function(req, res) {
 http.listen(3000, function() {
   console.log('listening on *:3000');
 });
+ 
+function CheckToStop() {
+  if (!ON) {
+    app.set('watchingFile', false);
+    if (proc) proc.kill();
+    fs.unwatchFile('./stream/image_stream.jpg');
+    console.log('Stopped');
+  }
+}
+
+
+
+// Get Data URI of Image
+function base64Image(src) {
+    var data = fs.readFileSync(src).toString("base64");
+    return util.format("data:%s;base64,%s", mime.lookup(src), data);
+}
 
 
  
-function Start() {
+function startStreaming(io) {
+
+  var del = (DELAY * 1000).toString();
+
+  var args = ["-w", WIDTH, "-h", HEIGHT, "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", del];
+
+  proc = spawn('raspistill', args);
+ 
+  console.log('Watching for changes...');
+ 
+  app.set('watchingFile', true);
+ 
+  fs.watchFile('./stream/image_stream.jpg', function(current, previous) {
+    var dataUri = base64Image("./stream/image_stream.jpg");
+
+    console.log('Watching');
+
+    CheckToStop();
 
     myFirebaseRef.child('img').set(dataUri, function(error) {
         if (error) {
@@ -90,9 +101,9 @@ function Start() {
 
     myFirebaseRef.child('date').set(new Date());
 
-  });
+  }); // End watchFile
  
-}
+} // End Streaming Fn
 
 
 

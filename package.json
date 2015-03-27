@@ -11,7 +11,8 @@
     "socket.io" : "",
     "express" : "",
     "firebase" : "",
-    "mime" : ""
+    "mime" : "",
+    "raspicam" : ""
   },
   "author": "Matthew Starkey",
   "license": "BSD"
