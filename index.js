@@ -64,9 +64,13 @@ console.log('Here');
 
 camera.on("started", function( err, timestamp ){
   console.log("photo started at " + timestamp );
+  Log('Started');
 });
 
 camera.on("read", function( err, timestamp, filename ){
+  if (err) {
+    Log(err);
+  };
   console.log("photo image captured with filename: " + filename );
   var dataUri = base64Image("./photo/image.jpg");
   Send(dataUri);
@@ -83,7 +87,9 @@ camera.on("exit", function( timestamp ){
 
  
 
-
+function Log(msg) {
+  myFirebaseRef.child('console').set(msg);
+}
 
  
 function Send(dataUri) {
