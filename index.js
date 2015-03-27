@@ -69,7 +69,9 @@ function base64Image(src) {
  
 function startStreaming(io) {
 
-  var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "30000"];
+  var del = (DELAY * 1000).toString();
+
+  var args = ["-w", "900", "-h", "675", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", del];
   proc = spawn('raspistill', args);
  
   console.log('Watching for changes...');
