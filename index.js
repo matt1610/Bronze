@@ -8,16 +8,28 @@ var Firebase = require("firebase");
 var fs = require('fs');
 var util = require("util");
 var path = require('path');
+var mime = require('mime');
 
 var RaspiCam = require("raspicam");
+
+// ROUTING
+app.use('/', express.static(path.join(__dirname, 'photo')));
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+ 
+http.listen(3000, function() {
+  console.log('listening on *:3000');
+});
+
 var camera = new RaspiCam({
     mode: "photo",
     output: "./photo/image.jpg",
     encoding: "jpg",
-    timeout: 0 // take the picture immediately
-  });
+    timeout: 20000
+});
 
-// var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
+var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
 
 var ON = false;
 var DELAY;
@@ -56,6 +68,8 @@ camera.on("started", function( err, timestamp ){
 
 camera.on("read", function( err, timestamp, filename ){
   console.log("photo image captured with filename: " + filename );
+  var dataUri = base64Image("./photo/image.jpg");
+  Send(dataUri);
 });
 
 camera.on("exit", function( timestamp ){
@@ -67,19 +81,11 @@ camera.on("exit", function( timestamp ){
 
 
  
-// ROUTING
-app.use('/', express.static(path.join(__dirname, 'stream')));
-app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
- 
-http.listen(3000, function() {
-  console.log('listening on *:3000');
-});
+
 
 
  
-function Start() {
+function Send(dataUri) {
 
     myFirebaseRef.child('img').set(dataUri, function(error) {
         if (error) {
@@ -96,12 +102,10 @@ function Start() {
 
 
 
-
-
-
-
-
-
+function base64Image(src) {
+    var data = fs.readFileSync(src).toString("base64");
+    return util.format("data:%s;base64,%s", mime.lookup(src), data);
+}
 
 
 
