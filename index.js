@@ -60,7 +60,7 @@ var HEIGHT;
 
 camera.start();
 
-console.log('Here');
+Log('Started');
 
 camera.on("started", function( err, timestamp ){
   console.log("photo started at " + timestamp );
