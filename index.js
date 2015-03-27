@@ -47,7 +47,7 @@ myFirebaseRef.child('settings').on('value', function(snapshot) {
 });
 
 
-
+console.log('Here');
 
 camera.on("started", function( err, timestamp ){
   console.log("photo started at " + timestamp );
