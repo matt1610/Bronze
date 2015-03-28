@@ -17,6 +17,10 @@ app.use('/', express.static(path.join(__dirname, 'photo')));
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
+
+app.get('/pi', function(req, res) {
+  res.send('Raspberry Pi!');
+})
  
 http.listen(3000, function() {
   console.log('listening on *:3000');
