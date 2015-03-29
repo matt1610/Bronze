@@ -30,7 +30,9 @@ var camera = new RaspiCam({
     mode: "photo",
     output: "./photo/image.jpg",
     encoding: "jpg",
-    timeout: 20000
+    timeout: 20000,
+    width: 900,
+    height: 675
 });
 
 var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
