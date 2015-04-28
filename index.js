@@ -43,28 +43,24 @@ var STREAMING;
 var WIDTH;
 var HEIGHT;
 
-// myFirebaseRef.child('settings').on('value', function(snapshot) {
+myFirebaseRef.child('settings').on('value', function(snapshot) {
 
-//   ON = snapshot.val().on;
-//   console.log('ON ' + ON);
+  ON = snapshot.val().on;
+  console.log('ON: ' + ON);
 
-//   DELAY = parseInt(snapshot.val().delay);
-//   console.log('DELAY: ' + DELAY);
+  DELAY = parseInt(snapshot.val().delay);
+  console.log('DELAY: ' + DELAY);
 
-//   WIDTH = snapshot.val().width.toString();
-//   HEIGHT = snapshot.val().height.toString();
+  WIDTH = snapshot.val().width.toString();
+  HEIGHT = snapshot.val().height.toString();
 
-//   if (ON == true) {
-//     // startStreaming(io);
-//   };
+  if (ON) {
+    camera.start();
+  };
 
-//   if (!ON) {
+});
 
-//   };
 
-// });
-
-camera.start();
 
 camera.on("started", function( err, timestamp ){
   console.log("photo started at " + timestamp );
@@ -106,7 +102,9 @@ function Send(dataUri) {
           console.log(error);
         } else{
           console.log('Image Uploaded');
-          camera.start();
+          if (ON) {
+            camera.start();
+          }
         }
     });
 
