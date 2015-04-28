@@ -26,14 +26,7 @@ http.listen(3000, function() {
   console.log('listening on *:3000');
 });
 
-var camera = new RaspiCam({
-    mode: "photo",
-    output: "./photo/image.jpg",
-    encoding: "jpg",
-    timeout: 20000,
-    width: 900,
-    height: 675
-});
+var camera;
 
 var myFirebaseRef = new Firebase("https://bronzecam.firebaseio.com/");
 
@@ -46,13 +39,20 @@ var HEIGHT;
 myFirebaseRef.child('settings').on('value', function(snapshot) {
 
   ON = snapshot.val().on;
-  console.log('ON: ' + ON);
 
   DELAY = parseInt(snapshot.val().delay);
-  console.log('DELAY: ' + DELAY);
 
   WIDTH = snapshot.val().width.toString();
   HEIGHT = snapshot.val().height.toString();
+
+  camera = new RaspiCam({
+    mode: "photo",
+    output: "./photo/image.jpg",
+    encoding: "jpg",
+    timeout: 20000,
+    width: WIDTH,
+    height: HEIGHT
+  });
 
   if (ON) {
     camera.start();
