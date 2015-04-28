@@ -39,7 +39,6 @@ var HEIGHT;
 myFirebaseRef.child('settings').on('value', function(snapshot) {
 
   ON = snapshot.val().on;
-
   DELAY = parseInt(snapshot.val().delay);
 
   WIDTH = snapshot.val().width.toString();
@@ -75,7 +74,11 @@ function Begin() {
     console.log("photo image captured with filename: " + filename );
     var dataUri = base64Image("./photo/image.jpg");
     Send(dataUri);
-    camera.stop();
+
+    if (ON) {
+      camera.stop();
+    }
+
     Log('Stopped');
   });
 
