@@ -55,33 +55,36 @@ myFirebaseRef.child('settings').on('value', function(snapshot) {
   });
 
   if (ON) {
+    Begin();
     camera.start();
   };
 
 });
 
+function Begin() {
+  camera.on("started", function( err, timestamp ){
+    console.log("photo started at " + timestamp );
+    Log('Started');
+  });
+
+  camera.on("read", function( err, timestamp, filename ){
+    if (err) {
+      Log(err);
+    };
+    Log('Read');
+    console.log("photo image captured with filename: " + filename );
+    var dataUri = base64Image("./photo/image.jpg");
+    Send(dataUri);
+    camera.stop();
+    Log('Stopped');
+  });
+
+  camera.on("exit", function( timestamp ){
+    console.log("photo child process has exited at " + timestamp );
+  });
+}
 
 
-camera.on("started", function( err, timestamp ){
-  console.log("photo started at " + timestamp );
-  Log('Started');
-});
-
-camera.on("read", function( err, timestamp, filename ){
-  if (err) {
-    Log(err);
-  };
-  Log('Read');
-  console.log("photo image captured with filename: " + filename );
-  var dataUri = base64Image("./photo/image.jpg");
-  Send(dataUri);
-  camera.stop();
-  Log('Stopped');
-});
-
-camera.on("exit", function( timestamp ){
-  console.log("photo child process has exited at " + timestamp );
-});
 
 
 
