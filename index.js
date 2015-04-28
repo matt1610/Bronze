@@ -53,6 +53,8 @@ myFirebaseRef.child('settings').on('value', function(snapshot) {
     height: HEIGHT
   });
 
+  camera.stop();
+
   if (ON) {
     Begin();
     camera.start();
