@@ -12,7 +12,8 @@
     "express" : "",
     "firebase" : "",
     "mime" : "",
-    "raspicam" : ""
+    "raspicam" : "",
+    "cors" : ""
   },
   "author": "Matthew Starkey",
   "license": "BSD"
