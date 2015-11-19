@@ -1,6 +1,7 @@
 console.log('Bronze App');
 var express = require('express');
 var app = express();
+var webHttp = require('http');
 var http = require('http').Server(app);
 
 var Firebase = require("firebase");
@@ -132,7 +133,7 @@ setInterval(function() {
 
 function getTestPersonaLoginCredentials() {
 
-    return http.get({
+    return webHttp.get({
         host: 'freedns.afraid.org',
         path: '/dynamic/update.php?T0E5WTl5eDZ1NWJJSjNhSm1SUGxaeGJ5OjE1Mjc5MjA1'
     }, function(response, err) {
