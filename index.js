@@ -48,6 +48,7 @@ app.get('/pi', function(req, res) {
 });
 
 app.get('/showimage', function( req, res ) {
+  res.writeHead(200, {'Content-Type': 'text/html'});
   res.send('<img src="'+imageURI+'/>');
 });
 
