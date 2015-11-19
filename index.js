@@ -47,13 +47,16 @@ app.get('/pi', function(req, res) {
   res.send('Raspberry Pi!');
 });
 
+app.get('/showimage', function( req, res ) {
+  res.send('<img src="'+imageURI+'"</img>');
+});
+
 app.get('/image', function( req, res ) {
-  if (imageURI) {
-    res.json({image:imageURI, success:true, date : new Date()});
-  } else{
-    res.json({success : false, message : 'Hang on there billy, the cam is still firing up, try again in a few moments.'});
-  }
-  
+    if (imageURI) {
+      res.json({image:imageURI, success:true, date : new Date()});
+    } else{
+      res.json({success : false, message : 'Hang on there billy, the cam is still firing up, try again in a few moments.'});
+    }
 });
  
 http.listen(6823, function() {
