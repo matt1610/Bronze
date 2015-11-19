@@ -49,7 +49,7 @@ app.get('/pi', function(req, res) {
 
 app.get('/showimage', function( req, res ) {
   res.writeHead(200, {'Content-Type': 'text/html'});
-  res.end('<html><head><title>Image</title></head><body><img src="'+imageURI+'/></body></html>');
+  res.end('<html><head><title>Image</title></head><body><img src="'+imageURI+'"/></body></html>');
 });
 
 app.get('/image', function( req, res ) {
