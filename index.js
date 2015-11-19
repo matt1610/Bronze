@@ -4,6 +4,8 @@ var app = express();
 var webHttp = require('http');
 var http = require('http').Server(app);
 
+var minute = 60000;
+
 var Firebase = require("firebase");
 
 var fs = require('fs');
