@@ -11,6 +11,7 @@ var path = require('path');
 var mime = require('mime');
 
 var RaspiCam = require("raspicam");
+var imageURI;
 
 // ROUTING
 app.use('/', express.static(path.join(__dirname, 'photo')));
@@ -20,10 +21,14 @@ app.get('/', function(req, res) {
 
 app.get('/pi', function(req, res) {
   res.send('Raspberry Pi!');
-})
+});
+
+app.get('/image', function( req, res ) {
+  res.send(imageURI);
+});
  
-http.listen(3000, function() {
-  console.log('listening on *:3000');
+http.listen(6823, function() {
+  console.log('listening on *:6823');
 });
 
 var camera = new RaspiCam({
@@ -76,6 +81,7 @@ function Begin() {
     Log('Read');
     console.log("photo image captured with filename: " + filename );
     var dataUri = base64Image("./photo/image.jpg");
+    imageURI = dataUri;
     Send(dataUri);
 
     if (ON) {
@@ -89,20 +95,12 @@ function Begin() {
     console.log("photo child process has exited at " + timestamp );
   });
 }
-
-
-
-
-
-
-
  
 
 function Log(msg) {
   var d = new Date();
   myFirebaseRef.child('console').set(msg +' '+ d.toTimeString());
 }
-
  
 function Send(dataUri) {
 
@@ -121,15 +119,39 @@ function Send(dataUri) {
  
 }
 
-
-
-
 function base64Image(src) {
     var data = fs.readFileSync(src).toString("base64");
     return util.format("data:%s;base64,%s", mime.lookup(src), data);
 }
 
+getTestPersonaLoginCredentials();
+setInterval(function() {
+  getTestPersonaLoginCredentials();
+},30 * minute);
 
+
+function getTestPersonaLoginCredentials() {
+
+    return http.get({
+        host: 'freedns.afraid.org',
+        path: '/dynamic/update.php?T0E5WTl5eDZ1NWJJSjNhSm1SUGxaeGJ5OjE1Mjc5MjA1'
+    }, function(response, err) {
+        // Continuously update stream with data
+        if (err) {
+          // console.log(err);
+        };
+        var body = '';
+        response.on('data', function(d) {
+            body += d;
+        });
+        response.on('end', function() {
+            // Data reception is done, do whatever with it!
+            // var parsed = JSON.parse(body);
+            console.log(body);
+        });
+    });
+
+}
 
 
 
