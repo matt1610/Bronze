@@ -48,7 +48,7 @@ app.get('/pi', function(req, res) {
 });
 
 app.get('/showimage', function( req, res ) {
-  res.send('<img src="'+imageURI+'"</img>');
+  res.send('<img src="'+imageURI+'/>');
 });
 
 app.get('/image', function( req, res ) {
