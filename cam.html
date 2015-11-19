@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Cam">
+<head>
+	<meta charset="UTF-8">
+	<title>Bronze Cam</title>
+	<script type="text/javascript" src="js/angular.min.js"></script>
+</head>
+<body ng-controller="MainCtrl">
+	<img src="{{ImageSrc}}">
+</body>
+<script type="text/javascript">
+	var Cam = angular.module('Cam', [])
+
+		.controller('MainCtrl', function($scope, $http){
+			$scope.ImageSrc = 'sdfsdf';
+
+			$http({
+				url : 'http://mattstarkey.crabdance.com/image',
+				method : 'get'
+			}).then(function(response) {
+				$scope.ImageSrc = response.data;
+			});
+		});
+
+</script>
+</html>

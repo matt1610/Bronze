@@ -3,6 +3,7 @@ var express = require('express');
 var app = express();
 var webHttp = require('http');
 var http = require('http').Server(app);
+var cors = require('cors');
 
 var minute = 60000;
 
@@ -16,10 +17,30 @@ var mime = require('mime');
 var RaspiCam = require("raspicam");
 var imageURI;
 
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    if ('OPTIONS' == req.method) {
+      res.send(200);
+    }
+    else {
+      next();
+    }
+};
+
+app.use(cors());
+app.use(allowCrossDomain);
+
 // ROUTING
 app.use('/', express.static(path.join(__dirname, 'photo')));
+app.use('/', express.static(path.join(__dirname, 'js')));
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/viewphoto', function(req, res) {
+  res.sendFile(__dirname + '/cam.html');
 });
 
 app.get('/pi', function(req, res) {
@@ -27,7 +48,7 @@ app.get('/pi', function(req, res) {
 });
 
 app.get('/image', function( req, res ) {
-  res.send(imageURI);
+  res.json({image:imageURI, success:true, date : new Date()});
 });
  
 http.listen(6823, function() {
