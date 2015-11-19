@@ -15,7 +15,7 @@ var path = require('path');
 var mime = require('mime');
 
 var RaspiCam = require("raspicam");
-var imageURI;
+var imageURI = false;
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -48,7 +48,12 @@ app.get('/pi', function(req, res) {
 });
 
 app.get('/image', function( req, res ) {
-  res.json({image:imageURI, success:true, date : new Date()});
+  if (imageURI) {
+    res.json({image:imageURI, success:true, date : new Date()});
+  } else{
+    res.json({success : false, message : 'Hang on there billy, the cam is still firing up, try again in a few moments.'});
+  }
+  
 });
  
 http.listen(6823, function() {
