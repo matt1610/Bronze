@@ -4,6 +4,7 @@ var app = express();
 var webHttp = require('http');
 var http = require('http').Server(app);
 var cors = require('cors');
+var exec = required('child_process').exec;
 
 var minute = 60000;
 
@@ -35,6 +36,7 @@ app.use(allowCrossDomain);
 // ROUTING
 app.use('/', express.static(path.join(__dirname, 'photo')));
 app.use('/', express.static(path.join(__dirname, 'js')));
+app.use('/static', express.static(__dirname + '/public'));
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
@@ -59,10 +61,40 @@ app.get('/image', function( req, res ) {
       res.json({success : false, message : 'Hang on there billy, the cam is still firing up, try again in a few moments.'});
     }
 });
+
+app.get('/takevideo', function (req, res) {
+    camera.stop();
+
+    var video = new RaspiCam({
+        mode: 'video',
+        output: './video/video.h264',
+        framerate: 15,
+        timeout: 5000
+    });
+
+    video.start();
+    video.on('read', function(err, timestamp, filename) {
+        //exec('ffmpeg -r 30 -i file.h264 -vcodec copy outputfile.mp4');
+        exec('ffmpeg -r 15 -i ' + filename + ' -vcodec copy public/outputfile.mp4', function(err, stdout, stderror) {
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+            if (error !== null) {
+                console.log('exec error: ' + error);
+            } else {
+                //success
+                res.json({ success: true, videoUrl: 'public/outputfile.mp4' });
+            }
+        });
+    });
+
+   
+
+});
  
 http.listen(6823, function() {
   console.log('listening on *:6823');
 });
+
 
 var camera = new RaspiCam({
     mode: "photo",
