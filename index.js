@@ -84,10 +84,9 @@ app.get('/takevideo', function (req, res) {
                 //success
                 res.json({ success: true, videoUrl: 'public/outputfile.mp4' });
             }
+            camera.start();
         });
     });
-
-   
 
 });
  
