@@ -157,13 +157,13 @@ function base64Image(src) {
     return util.format("data:%s;base64,%s", mime.lookup(src), data);
 }
 
-getTestPersonaLoginCredentials();
+updateDns();
 setInterval(function() {
-  getTestPersonaLoginCredentials();
+  updateDns();
 },30 * minute);
 
 
-function getTestPersonaLoginCredentials() {
+function updateDns() {
 
     return webHttp.get({
         host: 'freedns.afraid.org',
