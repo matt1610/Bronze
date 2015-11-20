@@ -4,7 +4,7 @@ var app = express();
 var webHttp = require('http');
 var http = require('http').Server(app);
 var cors = require('cors');
-var exec = required('child_process').exec;
+var exec = require('child_process').exec;
 
 var minute = 60000;
 
