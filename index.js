@@ -36,7 +36,7 @@ app.use(allowCrossDomain);
 // ROUTING
 app.use('/', express.static(path.join(__dirname, 'photo')));
 app.use('/', express.static(path.join(__dirname, 'js')));
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
