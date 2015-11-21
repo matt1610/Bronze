@@ -78,8 +78,8 @@ app.get('/takevideo', function (req, res) {
         exec('ffmpeg -r 15 -i ' + filename + ' -vcodec copy public/outputfile.mp4', function(err, stdout, stderror) {
             // console.log('stdout: ' + stdout);
             // console.log('stderr: ' + stderr);
-            if (error !== null) {
-                console.log('exec error: ' + error);
+            if (err !== null) {
+                console.log('exec error: ' + err);
             } else {
                 //success
                 res.json({ success: true, videoUrl: 'public/outputfile.mp4' });
