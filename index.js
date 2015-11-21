@@ -76,8 +76,8 @@ app.get('/takevideo', function (req, res) {
     video.on('read', function(err, timestamp, filename) {
         //exec('ffmpeg -r 30 -i file.h264 -vcodec copy outputfile.mp4');
         exec('ffmpeg -r 15 -i ' + filename + ' -vcodec copy public/outputfile.mp4', function(err, stdout, stderror) {
-            console.log('stdout: ' + stdout);
-            console.log('stderr: ' + stderr);
+            // console.log('stdout: ' + stdout);
+            // console.log('stderr: ' + stderr);
             if (error !== null) {
                 console.log('exec error: ' + error);
             } else {
