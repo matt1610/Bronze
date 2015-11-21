@@ -69,7 +69,9 @@ app.get('/takevideo', function (req, res) {
         mode: 'video',
         output: './video/video.h264',
         framerate: 15,
-        timeout: 5000
+        bitrate : 500000,
+        timeout: 5000,
+        verbose : true
     });
 
     video.start();
@@ -78,6 +80,7 @@ app.get('/takevideo', function (req, res) {
         exec('ffmpeg -r 15 -i ' + filename + ' -vcodec copy public/outputfile.mp4', function(err, stdout, stderror) {
             // console.log('stdout: ' + stdout);
             // console.log('stderr: ' + stderr);
+            console.log('Converting');
             if (err !== null) {
                 console.log('exec error: ' + err);
             } else {
