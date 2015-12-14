@@ -50,7 +50,7 @@ app.get('/viewphoto', function(req, res) {
 app.get('/restart', function (req,res) {
   // var temp = new Buffer(req.query.key).toString('base64');
   // if (temp == 'c2F5Y2hlZXNl') {
-    exec('$echo '+req.query.key+' | sudo -S reboot -r now', function (res) {
+    exec('echo -e "'+req.query.key+'" | sudo -S reboot -r now', function (res) {
       console.log(res);
     });
     res.json({success : true});
