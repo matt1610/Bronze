@@ -5,6 +5,8 @@ var webHttp = require('http');
 var http = require('http').Server(app);
 var cors = require('cors');
 var exec = require('child_process').exec;
+var os = require('os');
+var ifaces = os.networkInterfaces();
 
 var minute = 60000;
 
@@ -43,6 +45,29 @@ app.get('/', function(req, res) {
 
 app.get('/viewphoto', function(req, res) {
   res.sendFile(__dirname + '/cam.html');
+});
+
+app.get('/restart', function (req,res) {
+  var temp = new Buffer(req.query.key).toString('base64');
+  if (temp == 'c2F5Y2hlZXNl') {
+    exec('shutdown -r now', function (res) {
+      console.log(res);
+    });
+    res.json({success : true});
+  } else{
+    res.json({success : false});
+  }
+});
+
+app.get('/takenewpic', function (req, res) {
+  var temp = new Buffer(req.query.key).toString('base64');
+  if (temp == 'c2F5Y2hlZXNl') {
+    camera.stop();
+    camera.start();
+    res.json({success : true});
+  } else{
+    res.json({success : false});
+  }
 });
 
 app.get('/pi', function(req, res) {
@@ -196,6 +221,34 @@ setInterval(function() {
   updateDns();
 },30 * minute);
 
+
+function checkIp () {
+  Object.keys(ifaces).forEach(function (ifname) {
+    var alias = 0;
+
+    ifaces[ifname].forEach(function (iface) {
+      if ('IPv4' !== iface.family || iface.internal !== false) {
+        // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+        return;
+      }
+
+      if (alias >= 1) {
+        // this single interface has multiple ipv4 addresses
+        console.log(ifname + ':' + alias, iface.address);
+      } else {
+        // this interface has only one ipv4 adress
+        console.log(ifname, iface.address);
+      }
+      ++alias;
+
+      if (iface.address != '') {
+        exec('shutdown -r now', function (res) {
+          console.log(res);
+        });
+      };
+    });
+  });
+}
 
 function updateDns() {
 
