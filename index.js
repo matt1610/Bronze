@@ -242,7 +242,7 @@ function checkIp () {
       ++alias;
 
       if (iface.address != '') {
-        exec('shutdown -r now', function (res) {
+        exec('reboot -r now', function (res) {
           console.log(res);
         });
       };
