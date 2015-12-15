@@ -19,6 +19,7 @@ var mime = require('mime');
 
 var RaspiCam = require("raspicam");
 var imageURI = false;
+var IP = '';
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -80,8 +81,11 @@ app.get('/showimage', function( req, res ) {
 });
 
 app.get('/image', function( req, res ) {
+    var d = new Date();
+    d.setHours(d.getHours()+2);
+
     if (imageURI) {
-      res.json({image:imageURI, success:true, date : new Date()});
+      res.json({image:imageURI, success:true, date : d});
     } else{
       res.json({success : false, message : 'Hang on there billy, the cam is still firing up, try again in a few moments.'});
     }
@@ -191,6 +195,7 @@ function Begin() {
 
 function Log(msg) {
   var d = new Date();
+  d.setHours(d.getHours()+2);
   myFirebaseRef.child('console').set(msg +' '+ d.toTimeString());
 }
  
@@ -207,7 +212,11 @@ function Send(dataUri) {
         }
     });
 
-    myFirebaseRef.child('date').set(new Date());
+    var d = new Date();
+    d.setHours(d.getHours()+2);
+
+    myFirebaseRef.child('date').set(d);
+    myFirebaseRef.child('IP').set(IP);
  
 }
 
@@ -217,8 +226,10 @@ function base64Image(src) {
 }
 
 updateDns();
+checkIp();
 setInterval(function() {
   updateDns();
+  checkIp();
 },30 * minute);
 
 
@@ -241,11 +252,14 @@ function checkIp () {
       }
       ++alias;
 
-      if (iface.address != '') {
-        exec('reboot -r now', function (res) {
-          console.log(res);
-        });
-      };
+      // if (iface.address != '') {
+      //   exec('reboot -r now', function (res) {
+      //     console.log(res);
+      //   });
+      // };
+
+      IP = iface.address;
+
     });
   });
 }
